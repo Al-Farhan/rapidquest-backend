@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 
 const connectDb = require('./config/dbConn');
 
@@ -11,12 +12,15 @@ const PORT = process.env.PORT || 3500;
 
 connectDb();
 
+app.use(cors())
+
 app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/root'));
 app.use('/dashboard', require('./routes/dashboardRoutes'));
+app.use('/orders', require('./routes/orderRoutes'));
 
 app.all('*', (req, res) => {
     res.status(404)
